@@ -23,15 +23,17 @@ Liste over hardware dele og hardwarediagram findes i Fritzing-mappen.
 - Arduino IDE
 
 ### Biblioteker
+
 Projektet bruger følgende biblioteker:
+
 - Bounce2
 - DHT11
 - SimpleTimer
 
 Installér dem via Arduino IDE Library Manager eller kopier den medfølgende `libraries`-mappe til din Arduino libraries-mappe.
 
-
 ## Doxygen
+
 Koden er dokumenteret med Doxygen. For at generere dokumentation:
 
 1. Opsæt Doxygen-konfiguration ved at følge guiden på:
