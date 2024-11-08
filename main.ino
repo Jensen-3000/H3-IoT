@@ -1,53 +1,31 @@
 /**
  * @file main.ino
- * @brief Main implementation file for temperature monitoring system
- *
- * @details
- * This file contains the complete implementation of the temperature monitoring system,
- * including sensor reading, LED control, and user input processing.
- *
- * @author Jensen-3000
- * @author Mr. GPT
+ * @brief Temperature and humidity monitoring system with LED indicators
  * @version 1.0
  * @date 2024
  */
 
 /**
  * @mainpage Temperature Monitoring System
- * @brief Temperature and humidity monitoring system with LED indicators
+ * @brief Monitors temperature and humidity using a DHT11 sensor and provides visual feedback through LEDs.
  *
  * @section description Description
- * This system monitors temperature and humidity using a DHT11 sensor and provides
- * visual feedback through LEDs. It includes temperature control simulation with
- * a target temperature set via potentiometer.
+ * Monitors temperature and humidity using a DHT11 sensor and provides visual feedback through LEDs. 
+ * Includes temperature control simulation with a target temperature set via potentiometer.
  *
  * @section features Key Features
  * - Temperature and humidity monitoring using DHT11 sensor
  * - Visual feedback through RGB LEDs for temperature status
  * - Target temperature adjustment via potentiometer
- * - System on/off state persistence using EEPROM
- * - Button debouncing for reliable input
- *
- * @section architecture System Architecture
- * The system consists of the following main components:
- * - DHT11 temperature/humidity sensor
- * - 4 LED indicators (RGB + Yellow)
- * - Potentiometer for temperature setting
- * - Push button with debouncing
- * - EEPROM for state persistence
- *
- * @section error_handling Error Handling
- * The system handles the following error conditions:
- * - DHT11 sensor read failures
- * - Invalid temperature/humidity readings
- * - System state persistence errors
+ * - System on/off using a button
+ * - System state persistence using EEPROM
  *
  * @section hardware Hardware Requirements
  * - Arduino Mega 2560
  * - DHT11 temperature/humidity sensor with 220Ω resistor
  * - 4 LEDs (Red, Green, Blue, Yellow) with 220Ω resistors
  * - 10k potentiometer
- * - Push button (using internal pull-up)
+ * - Push button
  *
  * @section libraries Libraries Used
  * - Bounce2: https://github.com/thomasfredericks/Bounce2
@@ -65,11 +43,11 @@
  * @brief Pin assignments for all hardware connections
  * @{
  */
-const int RED_LED_PIN = 6;        ///< Pin for red LED (heating indicator)
+const int RED_LED_PIN = 6;        ///< Pin for red LED (heating)
 const int GREEN_LED_PIN = 5;      ///< Pin for green LED (optimal temperature)
-const int BLUE_LED_PIN = 4;       ///< Pin for blue LED (cooling indicator)
-const int YELLOW_LED_PIN = 7;     ///< Pin for yellow LED (simulate turn on/off)
-const int BUTTON_PIN = 10;        ///< Pin for turn on/off button
+const int BLUE_LED_PIN = 4;       ///< Pin for blue LED (cooling)
+const int YELLOW_LED_PIN = 7;     ///< Pin for yellow LED (system on/off)
+const int BUTTON_PIN = 10;        ///< Pin for on/off button
 const int DHT_SENSOR_PIN = 2;     ///< Pin for DHT11 sensor
 const int POTENTIOMETER_PIN = A0; ///< Analog pin for temperature setting
 /** @} */
@@ -77,8 +55,6 @@ const int POTENTIOMETER_PIN = A0; ///< Analog pin for temperature setting
 /**
  * @defgroup timing_constants Timing Configuration
  * @brief System timing parameters
- * @details Defines various timing constants used throughout the system for
- *          sensor reading intervals and input debouncing
  * @{
  */
 const int TEMPERATURE_READ_INTERVAL_MS = 1000; ///< Interval between temperature readings
@@ -87,14 +63,14 @@ const int DEBOUNCE_INTERVAL_MS = 25;           ///< Button debounce interval
 
 /**
  * @defgroup temperature_config Temperature Configuration
- * @brief Temperature control parameters and limits
+ * @brief Parameters and limits for temperature control
  * @{
  */
 const int POTENTIOMETER_MIN_VALUE = 0;    ///< Minimum analog reading from potentiometer
 const int POTENTIOMETER_MAX_VALUE = 1023; ///< Maximum analog reading from potentiometer
 const int MIN_TARGET_TEMPERATURE = 20;    ///< Minimum settable temperature in Celsius
 const int MAX_TARGET_TEMPERATURE = 30;    ///< Maximum settable temperature in Celsius
-const int TEMPERATURE_OFFSET = 1;         ///< Tolerance range for temperature control
+const int TEMPERATURE_OFFSET = 1;         ///< Temperature offset for the Green LED
 /** @} */
 
 /**
@@ -111,35 +87,22 @@ Bounce buttonDebouncer;                                         ///< Debouncer i
 
 /**
  * @brief Initialize the system
- * @details Sets up serial communication, configures pins, initializes button debouncer,
- * and loads the previous yellow LED state from EEPROM.
+ * @details Sets up serial communication, configures pins, initializes button debouncer, and loads the previous yellow LED state from EEPROM.
  *
  * @note Serial communication is initialized at 9600 baud rate
- * @see setupPins()
- * @see setupButton()
- * @see loadYellowLEDStateFromEEPROM()
  */
 void setup()
 {
     Serial.begin(9600);
-
     setupPins();
     setupButton();
     loadYellowLEDStateFromEEPROM();
-
     Serial.println("Setup complete.");
 }
 
 /**
  * @brief Main program loop
- * @details Continuously handles:
- *          - Button state updates
- *          - Button press detection
- *          - Temperature reading schedule
- *
- * @see buttonDebouncer
- * @see checkButtonPress()
- * @see readTemperaturePeriodically()
+ * @details Continuously handles button state updates, button press detection, and temperature reading.
  */
 void loop()
 {
@@ -149,16 +112,8 @@ void loop()
 }
 
 /**
- * Configure pin modes for all LEDs and inputs
- * @details Sets up all LED pins as outputs and button pin as input with pull-up resistor
- * @note Uses Arduino Mega 2560's internal pull-up resistor
- *
- * @pre All pin constants must be defined
- * @see RED_LED_PIN
- * @see GREEN_LED_PIN
- * @see BLUE_LED_PIN
- * @see YELLOW_LED_PIN
- * @see BUTTON_PIN
+ * @brief Configures pin modes for LEDs and button
+ * @details Sets LED pins as outputs and the button pin as input using the internal pull-up resistor.
  */
 void setupPins()
 {
@@ -170,11 +125,8 @@ void setupPins()
 }
 
 /**
- * Initialize button debouncer with specified settings
- * @details Configures button debouncing to prevent false triggers
- *
- * @see BUTTON_PIN
- * @see DEBOUNCE_INTERVAL_MS
+ * @brief Initialize button debouncer
+ * @details Uses Bounce2 for button debouncing to prevent false triggers.
  */
 void setupButton()
 {
@@ -192,8 +144,8 @@ void loadYellowLEDStateFromEEPROM()
 }
 
 /**
- * @brief Check for button press events and handle them
- * @details Monitors the debounced button state and triggers toggle when pressed
+ * @brief Check for button press to toggle the Yellow LED state
+ * @details Uses Bounce2 for debouncing and triggers the yellow LED toggle on button press.
  */
 void checkButtonPress()
 {
@@ -204,12 +156,8 @@ void checkButtonPress()
 }
 
 /**
- * @brief Toggle system power state
- * @details Toggles the yellow LED state and persists the new state to EEPROM
- *
- * @note This function handles the main power simulation of the system
- * @see updateYellowLEDState()
- * @see EEPROM_YELLOW_LED_STATE_ADDR
+ * @brief Toggles the yellow LED state
+ * @details Simulates turning the system on/off by toggling the yellow LED state, writes the new state to EEPROM, and updates the LED.
  */
 void toggleYellowLEDState()
 {
@@ -220,10 +168,7 @@ void toggleYellowLEDState()
 
 /**
  * @brief Update yellow LED output state
- * @details Sets the yellow LED based on isYellowLEDOn state
- *
- * @see turnOnYellowLED()
- * @see turnOffYellowLED()
+ * @details Sets the yellow LED based on isYellowLEDOn state.
  */
 void updateYellowLEDState()
 {
@@ -239,10 +184,7 @@ void updateYellowLEDState()
 
 /**
  * @brief Turn on yellow LED and disable other indicators
- * @details Ensures all other LEDs are off before enabling yellow LED
- *
- * @see turnOffAllLEDs()
- * @see YELLOW_LED_PIN
+ * @details Ensures all other LEDs are off before enabling yellow LED.
  */
 void turnOnYellowLED()
 {
@@ -253,9 +195,7 @@ void turnOnYellowLED()
 
 /**
  * @brief Turn off yellow LED
- * @details Disables the yellow LED and logs the state change
- *
- * @see YELLOW_LED_PIN
+ * @details Disables the yellow LED and logs the state change.
  */
 void turnOffYellowLED()
 {
@@ -265,12 +205,7 @@ void turnOffYellowLED()
 
 /**
  * @brief Schedule temperature readings
- * @details Checks if it's time to read temperature and only proceeds
- *          if the system is active (yellow LED off)
- *
- * @see temperatureReadTimer
- * @see isYellowLEDOn
- * @see readAndProcessTemperatureAndHumidity()
+ * @details Uses SimpleTimer to schedule temperature readings at a fixed interval. Only if the system (yellow LED) is on.
  */
 void readTemperaturePeriodically()
 {
@@ -286,12 +221,7 @@ void readTemperaturePeriodically()
 
 /**
  * @brief Read and process temperature sensor data
- * @details Attempts to read temperature and humidity from DHT11 sensor
- *          and processes the data if successful
- *
- * @note Sensor readings may be delayed by up to 1 second
- * @see processTemperatureAndHumidity()
- * @see handleTemperatureSensorError()
+ * @details Attempts to read temperature and humidity from DHT11 sensor and processes the data if successful.
  */
 void readAndProcessTemperatureAndHumidity()
 {
@@ -311,14 +241,10 @@ void readAndProcessTemperatureAndHumidity()
 
 /**
  * @brief Process temperature and humidity readings
- * @details Retrieves target temperature, displays readings, and controls LED indicators
+ * @details Retrieves target temperature, displays readings, and controls LED indicators.
  *
  * @param temperature Current temperature reading in Celsius
  * @param humidity Current humidity reading in percentage
- *
- * @see getTargetTemperatureFromPotentiometer()
- * @see displaySensorReadings()
- * @see controlLEDsBasedOnTemperature()
  */
 void processTemperatureAndHumidity(int temperature, int humidity)
 {
@@ -329,17 +255,9 @@ void processTemperatureAndHumidity(int temperature, int humidity)
 
 /**
  * @brief Get target temperature from potentiometer reading
- *
- * @details Maps the analog potentiometer value to a temperature
- * range defined by MIN_TARGET_TEMPERATURE and MAX_TARGET_TEMPERATURE
+ * @details Maps the analog potentiometer value to a temperature range defined by MIN_TARGET_TEMPERATURE and MAX_TARGET_TEMPERATURE.
  *
  * @return int Target temperature in Celsius
- * @retval MIN_TARGET_TEMPERATURE Returned when potentiometer at minimum
- * @retval MAX_TARGET_TEMPERATURE Returned when potentiometer at maximum
- * @retval Other values Linearly mapped between min and max temperatures
- *
- * @see MIN_TARGET_TEMPERATURE
- * @see MAX_TARGET_TEMPERATURE
  */
 int getTargetTemperatureFromPotentiometer()
 {
@@ -349,13 +267,11 @@ int getTargetTemperatureFromPotentiometer()
 
 /**
  * @brief Display sensor readings on serial monitor
- * @details Formats and outputs the current temperature, humidity, and target temperature
+ * @details Formats and outputs the current temperature, humidity, and target temperature.
  *
  * @param temperature Current temperature in Celsius
  * @param humidity Current humidity percentage
- * @param targetTemperature Target temperature in Celsius
- *
- * @pre Serial communication must be initialized
+ * @param targetTemperature Target temperature in Celsius, set by the potentiometer
  */
 void displaySensorReadings(int temperature, int humidity, int targetTemperature)
 {
@@ -390,10 +306,6 @@ void turnOffAllLEDs()
  *
  * @param temperature Current measured temperature in Celsius
  * @param targetTemperature Desired temperature in Celsius
- *
- * @pre All LED pins must be configured as outputs
- * @see turnOffAllLEDs()
- * @see TEMPERATURE_OFFSET
  */
 void controlLEDsBasedOnTemperature(int temperature, int targetTemperature)
 {
@@ -414,12 +326,9 @@ void controlLEDsBasedOnTemperature(int temperature, int targetTemperature)
 
 /**
  * @brief Handle and display DHT11 sensor errors
- * @details Translates error codes to human-readable messages and displays them
+ * @details Translates error codes to human-readable messages and displays them.
  *
  * @param errorCode Error code from DHT11 sensor reading operation
- *
- * @pre Serial communication must be initialized
- * @see DHT11::getErrorString()
  */
 void handleTemperatureSensorError(int errorCode)
 {
