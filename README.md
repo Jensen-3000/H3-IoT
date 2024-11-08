@@ -34,10 +34,12 @@ Installér dem via Arduino IDE Library Manager eller kopier den medfølgende `li
 
 ## Doxygen
 
-Koden er dokumenteret med Doxygen. For at generere dokumentation:
+Koden er dokumenteret med Doxygen.  
+Dette er inkluderet i repo (aka skip til pkt. 3)
 
-1. Opsæt Doxygen-konfiguration ved at følge guiden på:
-   https://www.woolseyworkshop.com/2020/03/20/documenting-arduino-sketches-with-doxygen/
+For at generere dokumentation:
+
+1. Opsæt Doxygen-konfiguration ved at følge guiden på [Woolsey Workshop](https://www.woolseyworkshop.com/2020/03/20/documenting-arduino-sketches-with-doxygen/)
 
 2. Kør `doxygen` i terminalen
 
