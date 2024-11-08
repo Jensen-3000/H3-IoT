@@ -1,6 +1,8 @@
 /**
  * @file main.ino
  * @brief Temperature and humidity monitoring system with LED indicators
+ * @author Jensen-3000
+ * @author Mr. GPT
  * @version 1.0
  * @date 2024
  */
