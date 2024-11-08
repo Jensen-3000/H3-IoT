@@ -87,34 +87,18 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">Temperature Monitoring System </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Temperature and humidity monitoring system with LED indicators  </p>
+<div class="textblock"><p>Monitors temperature and humidity using a DHT11 sensor and provides visual feedback through LEDs.  </p>
 <h1><a class="anchor" id="description"></a>
 Description</h1>
-<p>This system monitors temperature and humidity using a DHT11 sensor and provides visual feedback through LEDs. It includes temperature control simulation with a target temperature set via potentiometer.</p>
+<p>Monitors temperature and humidity using a DHT11 sensor and provides visual feedback through LEDs. Includes temperature control simulation with a target temperature set via potentiometer.</p>
 <h1><a class="anchor" id="features"></a>
 Key Features</h1>
 <ul>
 <li>Temperature and humidity monitoring using DHT11 sensor</li>
 <li>Visual feedback through RGB LEDs for temperature status</li>
 <li>Target temperature adjustment via potentiometer</li>
-<li>System on/off state persistence using EEPROM</li>
-<li>Button debouncing for reliable input</li>
-</ul>
-<h1><a class="anchor" id="architecture"></a>
-System Architecture</h1>
-<p>The system consists of the following main components:</p><ul>
-<li>DHT11 temperature/humidity sensor</li>
-<li>4 LED indicators (RGB + Yellow)</li>
-<li>Potentiometer for temperature setting</li>
-<li>Push button with debouncing</li>
-<li>EEPROM for state persistence</li>
-</ul>
-<h1><a class="anchor" id="error_handling"></a>
-Error Handling</h1>
-<p>The system handles the following error conditions:</p><ul>
-<li>DHT11 sensor read failures</li>
-<li>Invalid temperature/humidity readings</li>
-<li>System state persistence errors</li>
+<li>System on/off using a button</li>
+<li>System state persistence using EEPROM</li>
 </ul>
 <h1><a class="anchor" id="hardware"></a>
 Hardware Requirements</h1>
@@ -123,7 +107,7 @@ Hardware Requirements</h1>
 <li>DHT11 temperature/humidity sensor with 220Ω resistor</li>
 <li>4 LEDs (Red, Green, Blue, Yellow) with 220Ω resistors</li>
 <li>10k potentiometer</li>
-<li>Push button (using internal pull-up)</li>
+<li>Push button</li>
 </ul>
 <h1><a class="anchor" id="libraries"></a>
 Libraries Used</h1>

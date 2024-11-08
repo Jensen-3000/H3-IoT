@@ -91,7 +91,7 @@ $(function(){ initResizable(false); });
 </div><!--header-->
 <div class="contents">
 
-<p>Main implementation file for temperature monitoring system.  
+<p>Temperature and humidity monitoring system with LED indicators.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;DHT11.h&gt;</code><br />
 <code>#include &lt;Bounce2.h&gt;</code><br />
@@ -113,17 +113,19 @@ Functions</h2></td></tr>
 <tr class="memdesc:afe461d27b9c48d5921c00d521181f12f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main program loop.  <br /></td></tr>
 <tr class="separator:afe461d27b9c48d5921c00d521181f12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31d554847ae8fdeaba2460e0395cb75f" id="r_a31d554847ae8fdeaba2460e0395cb75f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31d554847ae8fdeaba2460e0395cb75f">setupPins</a> ()</td></tr>
+<tr class="memdesc:a31d554847ae8fdeaba2460e0395cb75f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures pin modes for LEDs and button.  <br /></td></tr>
 <tr class="separator:a31d554847ae8fdeaba2460e0395cb75f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14b55e0a18d330a4eb497115379d565e" id="r_a14b55e0a18d330a4eb497115379d565e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14b55e0a18d330a4eb497115379d565e">setupButton</a> ()</td></tr>
+<tr class="memdesc:a14b55e0a18d330a4eb497115379d565e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize button debouncer.  <br /></td></tr>
 <tr class="separator:a14b55e0a18d330a4eb497115379d565e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89c5918b26dbde7581f6887934a3c7d5" id="r_a89c5918b26dbde7581f6887934a3c7d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89c5918b26dbde7581f6887934a3c7d5">loadYellowLEDStateFromEEPROM</a> ()</td></tr>
 <tr class="memdesc:a89c5918b26dbde7581f6887934a3c7d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load yellow LED state from EEPROM and update LED accordingly.  <br /></td></tr>
 <tr class="separator:a89c5918b26dbde7581f6887934a3c7d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeeccf1ae60633de0702860240539a0be" id="r_aeeccf1ae60633de0702860240539a0be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeeccf1ae60633de0702860240539a0be">checkButtonPress</a> ()</td></tr>
-<tr class="memdesc:aeeccf1ae60633de0702860240539a0be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for button press events and handle them.  <br /></td></tr>
+<tr class="memdesc:aeeccf1ae60633de0702860240539a0be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for button press to toggle the Yellow LED state.  <br /></td></tr>
 <tr class="separator:aeeccf1ae60633de0702860240539a0be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a094278e65396d92f9304751c336f119d" id="r_a094278e65396d92f9304751c336f119d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a094278e65396d92f9304751c336f119d">toggleYellowLEDState</a> ()</td></tr>
-<tr class="memdesc:a094278e65396d92f9304751c336f119d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggle system power state.  <br /></td></tr>
+<tr class="memdesc:a094278e65396d92f9304751c336f119d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggles the yellow LED state.  <br /></td></tr>
 <tr class="separator:a094278e65396d92f9304751c336f119d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac217142fc9efa3e8c6a0ddcb824260cc" id="r_ac217142fc9efa3e8c6a0ddcb824260cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac217142fc9efa3e8c6a0ddcb824260cc">updateYellowLEDState</a> ()</td></tr>
 <tr class="memdesc:ac217142fc9efa3e8c6a0ddcb824260cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update yellow LED output state.  <br /></td></tr>
@@ -162,19 +164,19 @@ Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:ga38aba20261e878b1c24efa4acb7c66ae" id="r_ga38aba20261e878b1c24efa4acb7c66ae"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pins.html#ga38aba20261e878b1c24efa4acb7c66ae">RED_LED_PIN</a> = 6</td></tr>
-<tr class="memdesc:ga38aba20261e878b1c24efa4acb7c66ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for red LED (heating indicator)  <br /></td></tr>
+<tr class="memdesc:ga38aba20261e878b1c24efa4acb7c66ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for red LED (heating)  <br /></td></tr>
 <tr class="separator:ga38aba20261e878b1c24efa4acb7c66ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga05d3f047f74a30824417bd3cf8379c07" id="r_ga05d3f047f74a30824417bd3cf8379c07"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pins.html#ga05d3f047f74a30824417bd3cf8379c07">GREEN_LED_PIN</a> = 5</td></tr>
 <tr class="memdesc:ga05d3f047f74a30824417bd3cf8379c07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for green LED (optimal temperature)  <br /></td></tr>
 <tr class="separator:ga05d3f047f74a30824417bd3cf8379c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga612931a5beb5ac43f2cb703707f96689" id="r_ga612931a5beb5ac43f2cb703707f96689"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pins.html#ga612931a5beb5ac43f2cb703707f96689">BLUE_LED_PIN</a> = 4</td></tr>
-<tr class="memdesc:ga612931a5beb5ac43f2cb703707f96689"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for blue LED (cooling indicator)  <br /></td></tr>
+<tr class="memdesc:ga612931a5beb5ac43f2cb703707f96689"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for blue LED (cooling)  <br /></td></tr>
 <tr class="separator:ga612931a5beb5ac43f2cb703707f96689"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaa01a540c74f62bbed3b5dc395d8d9aae" id="r_gaa01a540c74f62bbed3b5dc395d8d9aae"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pins.html#gaa01a540c74f62bbed3b5dc395d8d9aae">YELLOW_LED_PIN</a> = 7</td></tr>
-<tr class="memdesc:gaa01a540c74f62bbed3b5dc395d8d9aae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for yellow LED (simulate turn on/off)  <br /></td></tr>
+<tr class="memdesc:gaa01a540c74f62bbed3b5dc395d8d9aae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for yellow LED (system on/off)  <br /></td></tr>
 <tr class="separator:gaa01a540c74f62bbed3b5dc395d8d9aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga4adb49baac164d761359c1af0d2c2bb2" id="r_ga4adb49baac164d761359c1af0d2c2bb2"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pins.html#ga4adb49baac164d761359c1af0d2c2bb2">BUTTON_PIN</a> = 10</td></tr>
-<tr class="memdesc:ga4adb49baac164d761359c1af0d2c2bb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for turn on/off button.  <br /></td></tr>
+<tr class="memdesc:ga4adb49baac164d761359c1af0d2c2bb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for on/off button.  <br /></td></tr>
 <tr class="separator:ga4adb49baac164d761359c1af0d2c2bb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga783fa132594d6f87519d70b86ec8b183" id="r_ga783fa132594d6f87519d70b86ec8b183"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pins.html#ga783fa132594d6f87519d70b86ec8b183">DHT_SENSOR_PIN</a> = 2</td></tr>
 <tr class="memdesc:ga783fa132594d6f87519d70b86ec8b183"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pin for DHT11 sensor.  <br /></td></tr>
@@ -201,7 +203,7 @@ Variables</h2></td></tr>
 <tr class="memdesc:gaa31f4ff34bea1206783530efc30e2a2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum settable temperature in Celsius.  <br /></td></tr>
 <tr class="separator:gaa31f4ff34bea1206783530efc30e2a2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga55888db6b33cc17157e17ddf30fb446a" id="r_ga55888db6b33cc17157e17ddf30fb446a"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__temperature__config.html#ga55888db6b33cc17157e17ddf30fb446a">TEMPERATURE_OFFSET</a> = 1</td></tr>
-<tr class="memdesc:ga55888db6b33cc17157e17ddf30fb446a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tolerance range for temperature control.  <br /></td></tr>
+<tr class="memdesc:ga55888db6b33cc17157e17ddf30fb446a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Temperature offset for the Green LED.  <br /></td></tr>
 <tr class="separator:ga55888db6b33cc17157e17ddf30fb446a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga47c0367b8e0a0edd83a752d891f18edd" id="r_ga47c0367b8e0a0edd83a752d891f18edd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__system__state.html#ga47c0367b8e0a0edd83a752d891f18edd">isYellowLEDOn</a> = false</td></tr>
 <tr class="memdesc:ga47c0367b8e0a0edd83a752d891f18edd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current state of yellow LED.  <br /></td></tr>
@@ -214,8 +216,7 @@ Variables</h2></td></tr>
 <tr class="separator:gacfe43c00ab51aee6f271d47daa0903c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Main implementation file for temperature monitoring system. </p>
-<p>This file contains the complete implementation of the temperature monitoring system, including sensor reading, LED control, and user input processing.</p>
+<div class="textblock"><p>Temperature and humidity monitoring system with LED indicators. </p>
 <dl class="section author"><dt>Author</dt><dd>Jensen-3000 </dd>
 <dd>
 Mr. GPT </dd></dl>
@@ -237,8 +238,8 @@ Mr. GPT </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Check for button press events and handle them. </p>
-<p>Monitors the debounced button state and triggers toggle when pressed </p>
+<p>Check for button press to toggle the Yellow LED state. </p>
+<p>Uses Bounce2 for debouncing and triggers the yellow LED toggle on button press. </p>
 
 </div>
 </div>
@@ -270,14 +271,10 @@ Mr. GPT </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">temperature</td><td>Current measured temperature in Celsius </td></tr>
-    <tr><td class="paramname">targetTemperature</td><td>Desired temperature in Celsius</td></tr>
+    <tr><td class="paramname">targetTemperature</td><td>Desired temperature in Celsius </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section pre"><dt>Precondition</dt><dd>All LED pins must be configured as outputs </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a120fb50550fcd7229f6adf36edd67749" title="Turn off all LED indicators.">turnOffAllLEDs()</a> </dd>
-<dd>
-<a class="el" href="group__temperature__config.html#ga55888db6b33cc17157e17ddf30fb446a" title="Tolerance range for temperature control.">TEMPERATURE_OFFSET</a> </dd></dl>
 
 </div>
 </div>
@@ -306,16 +303,15 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Display sensor readings on serial monitor. </p>
-<p>Formats and outputs the current temperature, humidity, and target temperature</p>
+<p>Formats and outputs the current temperature, humidity, and target temperature.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">temperature</td><td>Current temperature in Celsius </td></tr>
     <tr><td class="paramname">humidity</td><td>Current humidity percentage </td></tr>
-    <tr><td class="paramname">targetTemperature</td><td>Target temperature in Celsius</td></tr>
+    <tr><td class="paramname">targetTemperature</td><td>Target temperature in Celsius, set by the potentiometer </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section pre"><dt>Precondition</dt><dd>Serial communication must be initialized </dd></dl>
 
 </div>
 </div>
@@ -335,19 +331,8 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Get target temperature from potentiometer reading. </p>
-<p>Maps the analog potentiometer value to a temperature range defined by MIN_TARGET_TEMPERATURE and MAX_TARGET_TEMPERATURE</p>
+<p>Maps the analog potentiometer value to a temperature range defined by MIN_TARGET_TEMPERATURE and MAX_TARGET_TEMPERATURE.</p>
 <dl class="section return"><dt>Returns</dt><dd>int Target temperature in Celsius </dd></dl>
-<dl class="retval"><dt>Return values</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname">MIN_TARGET_TEMPERATURE</td><td>Returned when potentiometer at minimum </td></tr>
-    <tr><td class="paramname">MAX_TARGET_TEMPERATURE</td><td>Returned when potentiometer at maximum </td></tr>
-    <tr><td class="paramname">Other</td><td>values Linearly mapped between min and max temperatures</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__temperature__config.html#gab7e55179b7b6c783c70f07f8db74257c" title="Minimum settable temperature in Celsius.">MIN_TARGET_TEMPERATURE</a> </dd>
-<dd>
-<a class="el" href="group__temperature__config.html#gaa31f4ff34bea1206783530efc30e2a2d" title="Maximum settable temperature in Celsius.">MAX_TARGET_TEMPERATURE</a> </dd></dl>
 
 </div>
 </div>
@@ -367,15 +352,13 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Handle and display DHT11 sensor errors. </p>
-<p>Translates error codes to human-readable messages and displays them</p>
+<p>Translates error codes to human-readable messages and displays them.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">errorCode</td><td>Error code from DHT11 sensor reading operation</td></tr>
+    <tr><td class="paramname">errorCode</td><td>Error code from DHT11 sensor reading operation </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section pre"><dt>Precondition</dt><dd>Serial communication must be initialized </dd></dl>
-<dl class="section see"><dt>See also</dt><dd>DHT11::getErrorString() </dd></dl>
 
 </div>
 </div>
@@ -414,16 +397,7 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Main program loop. </p>
-<p>Continuously handles:</p><ul>
-<li>Button state updates</li>
-<li>Button press detection</li>
-<li>Temperature reading schedule</li>
-</ul>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__system__state.html#gacfe43c00ab51aee6f271d47daa0903c9" title="Debouncer instance for system button.">buttonDebouncer</a> </dd>
-<dd>
-<a class="el" href="#aeeccf1ae60633de0702860240539a0be" title="Check for button press events and handle them.">checkButtonPress()</a> </dd>
-<dd>
-<a class="el" href="#ae38183c45a5454c15d2a3e8d7940f2b2" title="Schedule temperature readings.">readTemperaturePeriodically()</a> </dd></dl>
+<p>Continuously handles button state updates, button press detection, and temperature reading. </p>
 
 </div>
 </div>
@@ -447,19 +421,14 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Process temperature and humidity readings. </p>
-<p>Retrieves target temperature, displays readings, and controls LED indicators</p>
+<p>Retrieves target temperature, displays readings, and controls LED indicators.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">temperature</td><td>Current temperature reading in Celsius </td></tr>
-    <tr><td class="paramname">humidity</td><td>Current humidity reading in percentage</td></tr>
+    <tr><td class="paramname">humidity</td><td>Current humidity reading in percentage </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a595f8d3fc0e313c0f4428e9df1ac22cb" title="Get target temperature from potentiometer reading.">getTargetTemperatureFromPotentiometer()</a> </dd>
-<dd>
-<a class="el" href="#a93a6679f2b9b5d6e4bd186689ac6e570" title="Display sensor readings on serial monitor.">displaySensorReadings()</a> </dd>
-<dd>
-<a class="el" href="#a7c2fecb8c74df5748e3556eba81efd3a" title="Control LED indicators based on current vs target temperature.">controlLEDsBasedOnTemperature()</a> </dd></dl>
 
 </div>
 </div>
@@ -479,11 +448,7 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Read and process temperature sensor data. </p>
-<p>Attempts to read temperature and humidity from DHT11 sensor and processes the data if successful</p>
-<dl class="section note"><dt>Note</dt><dd>Sensor readings may be delayed by up to 1 second </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a52dcb71a390fe8cd63d861a1e7ce1969" title="Process temperature and humidity readings.">processTemperatureAndHumidity()</a> </dd>
-<dd>
-<a class="el" href="#ab5eca5610db903db859a59b4993471f9" title="Handle and display DHT11 sensor errors.">handleTemperatureSensorError()</a> </dd></dl>
+<p>Attempts to read temperature and humidity from DHT11 sensor and processes the data if successful. </p>
 
 </div>
 </div>
@@ -503,12 +468,7 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Schedule temperature readings. </p>
-<p>Checks if it's time to read temperature and only proceeds if the system is active (yellow LED off)</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__system__state.html#ga0c0dc13b55b7570c5f08b1df66d7c355" title="Timer for sensor reading.">temperatureReadTimer</a> </dd>
-<dd>
-<a class="el" href="group__system__state.html#ga47c0367b8e0a0edd83a752d891f18edd" title="Current state of yellow LED.">isYellowLEDOn</a> </dd>
-<dd>
-<a class="el" href="#a5030306144a29842d3de30d8706bf1eb" title="Read and process temperature sensor data.">readAndProcessTemperatureAndHumidity()</a> </dd></dl>
+<p>Uses SimpleTimer to schedule temperature readings at a fixed interval. Only if the system (yellow LED) is on. </p>
 
 </div>
 </div>
@@ -530,11 +490,6 @@ Mr. GPT </dd></dl>
 <p>Initialize the system. </p>
 <p>Sets up serial communication, configures pins, initializes button debouncer, and loads the previous yellow LED state from EEPROM.</p>
 <dl class="section note"><dt>Note</dt><dd>Serial communication is initialized at 9600 baud rate </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a31d554847ae8fdeaba2460e0395cb75f">setupPins()</a> </dd>
-<dd>
-<a class="el" href="#a14b55e0a18d330a4eb497115379d565e">setupButton()</a> </dd>
-<dd>
-<a class="el" href="#a89c5918b26dbde7581f6887934a3c7d5" title="Load yellow LED state from EEPROM and update LED accordingly.">loadYellowLEDStateFromEEPROM()</a> </dd></dl>
 
 </div>
 </div>
@@ -552,11 +507,9 @@ Mr. GPT </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Initialize button debouncer with specified settings</p>
-<p>Configures button debouncing to prevent false triggers</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__pins.html#ga4adb49baac164d761359c1af0d2c2bb2" title="Pin for turn on/off button.">BUTTON_PIN</a> </dd>
-<dd>
-<a class="el" href="group__timing__constants.html#gad1c9fbb1e3ee064445a9bd86948d4abe" title="Button debounce interval.">DEBOUNCE_INTERVAL_MS</a> </dd></dl>
+
+<p>Initialize button debouncer. </p>
+<p>Uses Bounce2 for button debouncing to prevent false triggers. </p>
 
 </div>
 </div>
@@ -574,18 +527,9 @@ Mr. GPT </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Configure pin modes for all LEDs and inputs</p>
-<p>Sets up all LED pins as outputs and button pin as input with pull-up resistor </p><dl class="section note"><dt>Note</dt><dd>Uses Arduino Mega 2560's internal pull-up resistor</dd></dl>
-<dl class="section pre"><dt>Precondition</dt><dd>All pin constants must be defined </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__pins.html#ga38aba20261e878b1c24efa4acb7c66ae" title="Pin for red LED (heating indicator)">RED_LED_PIN</a> </dd>
-<dd>
-<a class="el" href="group__pins.html#ga05d3f047f74a30824417bd3cf8379c07" title="Pin for green LED (optimal temperature)">GREEN_LED_PIN</a> </dd>
-<dd>
-<a class="el" href="group__pins.html#ga612931a5beb5ac43f2cb703707f96689" title="Pin for blue LED (cooling indicator)">BLUE_LED_PIN</a> </dd>
-<dd>
-<a class="el" href="group__pins.html#gaa01a540c74f62bbed3b5dc395d8d9aae" title="Pin for yellow LED (simulate turn on/off)">YELLOW_LED_PIN</a> </dd>
-<dd>
-<a class="el" href="group__pins.html#ga4adb49baac164d761359c1af0d2c2bb2" title="Pin for turn on/off button.">BUTTON_PIN</a> </dd></dl>
+
+<p>Configures pin modes for LEDs and button. </p>
+<p>Sets LED pins as outputs and the button pin as input using the internal pull-up resistor. </p>
 
 </div>
 </div>
@@ -604,12 +548,8 @@ Mr. GPT </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>Toggle system power state. </p>
-<p>Toggles the yellow LED state and persists the new state to EEPROM</p>
-<dl class="section note"><dt>Note</dt><dd>This function handles the main power simulation of the system </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#ac217142fc9efa3e8c6a0ddcb824260cc" title="Update yellow LED output state.">updateYellowLEDState()</a> </dd>
-<dd>
-<a class="el" href="group__system__state.html#gaadb9e68b32faa2d083c63c42c061ae43" title="EEPROM address for storing LED state.">EEPROM_YELLOW_LED_STATE_ADDR</a> </dd></dl>
+<p>Toggles the yellow LED state. </p>
+<p>Simulates turning the system on/off by toggling the yellow LED state, writes the new state to EEPROM, and updates the LED. </p>
 
 </div>
 </div>
@@ -648,8 +588,7 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Turn off yellow LED. </p>
-<p>Disables the yellow LED and logs the state change</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="group__pins.html#gaa01a540c74f62bbed3b5dc395d8d9aae" title="Pin for yellow LED (simulate turn on/off)">YELLOW_LED_PIN</a> </dd></dl>
+<p>Disables the yellow LED and logs the state change. </p>
 
 </div>
 </div>
@@ -669,10 +608,7 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Turn on yellow LED and disable other indicators. </p>
-<p>Ensures all other LEDs are off before enabling yellow LED</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a120fb50550fcd7229f6adf36edd67749" title="Turn off all LED indicators.">turnOffAllLEDs()</a> </dd>
-<dd>
-<a class="el" href="group__pins.html#gaa01a540c74f62bbed3b5dc395d8d9aae" title="Pin for yellow LED (simulate turn on/off)">YELLOW_LED_PIN</a> </dd></dl>
+<p>Ensures all other LEDs are off before enabling yellow LED. </p>
 
 </div>
 </div>
@@ -692,10 +628,7 @@ Mr. GPT </dd></dl>
 </div><div class="memdoc">
 
 <p>Update yellow LED output state. </p>
-<p>Sets the yellow LED based on isYellowLEDOn state</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="#a947f5765f4acd027962a7e3f8d862652" title="Turn on yellow LED and disable other indicators.">turnOnYellowLED()</a> </dd>
-<dd>
-<a class="el" href="#ad7aa19ac56c3ab3561dae71e404ac442" title="Turn off yellow LED.">turnOffYellowLED()</a> </dd></dl>
+<p>Sets the yellow LED based on isYellowLEDOn state. </p>
 
 </div>
 </div>
